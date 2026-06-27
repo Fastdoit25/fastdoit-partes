@@ -287,6 +287,39 @@
 
   .cargando { text-align: center; padding: 30px; color: #888; font-size: 0.9rem; }
 
+  /* CAMPO CON X */
+  .field-wrap { position: relative; }
+  .field-wrap input {
+    width: 100%;
+    padding: 16px 44px 16px 14px;
+    font-size: 1.15rem;
+    border: 2px solid #333;
+    border-radius: 10px;
+    background: #2A2A2A;
+    color: var(--blanco);
+    outline: none;
+  }
+  .field-wrap input:focus { border-color: var(--amarillo); }
+  .btn-clear {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: #444;
+    border: none;
+    color: #ccc;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 0.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+  }
+  .btn-clear:hover { background: #666; color: white; }
+
   /* BUSCADOR NOMBRES */
   .buscador-wrap { position: relative; }
   .buscador-wrap input[type="text"] {
@@ -351,11 +384,11 @@
   <div id="form-contenido">
     <div class="campo">
       <label>Tu nombre</label>
-      <div class="buscador-wrap" id="buscador-wrap">
-        <input type="text" id="nombre-buscar" placeholder="Escribe tu nombre..." autocomplete="off" oninput="filtrarNombres()" onfocus="mostrarLista()" onblur="ocultarLista()">
-        <div class="nombre-lista" id="nombre-lista"></div>
+      <div class="field-wrap">
+        <input type="text" id="nombre" list="lista-nombres" placeholder="Escribe tu nombre..." autocomplete="off" oninput="syncClear('nombre','btn-clear-nombre')" style="padding-right:44px">
+        <datalist id="lista-nombres"></datalist>
+        <button class="btn-clear" id="btn-clear-nombre" onclick="clearField('nombre','btn-clear-nombre')" style="display:none">✕</button>
       </div>
-      <input type="hidden" id="nombre">
     </div>
 
     <div class="campo">
@@ -365,9 +398,9 @@
 
     <div class="campo">
       <label>Obra</label>
-      <div class="select-wrap">
-        <select id="obra">
-          <option value="">— Selecciona la obra —</option>
+      <div class="field-wrap">
+        <input type="text" id="obra" list="lista-obras" placeholder="Escribe o busca la obra..." autocomplete="off" oninput="syncClear('obra','btn-clear-obra')" style="padding-right:44px">
+        <datalist id="lista-obras">
           <option>BECSA LOS NARANJOS</option>
           <option>BECSA MONTSERRAT</option>
           <option>BECSA TORRENTE</option>
@@ -391,7 +424,8 @@
           <option>UTE FERROVIAL MONCOFAR</option>
           <option>VEOLIA CARLET</option>
           <option>VEOLIA PATERNA</option>
-        </select>
+        </datalist>
+        <button class="btn-clear" id="btn-clear-obra" onclick="clearField('obra','btn-clear-obra')" style="display:none">✕</button>
       </div>
     </div>
 
@@ -458,7 +492,7 @@
           <option>DOC TURISMO</option>
           <option>FERROVIAL OROPESA</option>
           <option>OBRA MªDOLORES CAMPILLO DE DUEÑAS</option>
-          <option>OBRA PUÇCOL RUBÉN VAQUERO</option>
+          <option>OBRA PUÇOL RUBÉN VAQUERO</option>
           <option>PIRAVALLS MONCADA</option>
           <option>REVISAR</option>
           <option>URBIALBA AVDA PUERTO</option>
@@ -600,13 +634,20 @@ window.onload = () => {
   document.getElementById('fecha').value = fechaISO;
   document.getElementById('fecha-header').textContent = hoy.toLocaleDateString('es-ES', {weekday:'long', day:'numeric', month:'long'});
 
+  // Poblar datalist de trabajadores
+  const dl = document.getElementById('lista-nombres');
+  TRABAJADORES.forEach(t => {
+    const opt = document.createElement('option');
+    opt.value = t;
+    dl.appendChild(opt);
+  });
+
   // Guardar último trabajador seleccionado
   const ultimo = localStorage.getItem('ultimo_trabajador');
   if (ultimo) {
     document.getElementById('nombre').value = ultimo;
-    document.getElementById('nombre-buscar').value = ultimo;
+    syncClear('nombre', 'btn-clear-nombre');
   }
-  renderListaNombres(TRABAJADORES);
 };
 
 // ─── BUSCADOR NOMBRES ───────────────────────────
@@ -654,6 +695,18 @@ function seleccionarNombre(nombre) {
   document.getElementById('nombre-lista').classList.remove('visible');
 }
 
+// ─── CAMPO CON X ────────────────────────────────
+function syncClear(fieldId, btnId) {
+  const val = document.getElementById(fieldId).value;
+  document.getElementById(btnId).style.display = val ? 'flex' : 'none';
+}
+
+function clearField(fieldId, btnId) {
+  document.getElementById(fieldId).value = '';
+  document.getElementById(btnId).style.display = 'none';
+  document.getElementById(fieldId).focus();
+}
+
 // ─── PARTE TRABAJADOR ───────────────────────────
 function enviarParte() {
   const nombre = document.getElementById('nombre').value;
@@ -674,6 +727,7 @@ function enviarParte() {
   btn.textContent = 'Enviando...';
 
   localStorage.setItem('ultimo_trabajador', nombre);
+  syncClear('nombre', 'btn-clear-nombre');
 
   const datos = { nombre, fecha, obra, horas: parseFloat(horas) };
 
