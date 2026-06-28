@@ -320,6 +320,132 @@
   }
   .btn-clear:hover { background: #666; color: white; }
 
+  /* ACOMPAÑANTES */
+  .acomp-lista { margin-top: 10px; display: flex; flex-direction: column; gap: 10px; }
+  .acomp-item {
+    background: #222;
+    border: 1px solid #333;
+    border-radius: 10px;
+    padding: 12px 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    position: relative;
+  }
+  .acomp-item .acomp-nombre {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--amarillo);
+  }
+  .acomp-item .acomp-horas-wrap {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .acomp-item .acomp-horas-wrap label {
+    font-size: 0.8rem;
+    color: #aaa;
+    text-transform: none;
+    letter-spacing: 0;
+    margin: 0;
+    white-space: nowrap;
+  }
+  .acomp-item input[type="number"] {
+    width: 90px;
+    padding: 8px 10px;
+    font-size: 1rem;
+    border: 1px solid #444;
+    border-radius: 8px;
+    background: #2A2A2A;
+    color: white;
+  }
+  .btn-quitar-acomp {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: #333;
+    border: none;
+    color: #aaa;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 0.7rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .btn-quitar-acomp:hover { background: var(--rojo); color: white; }
+  .btn-añadir-acomp {
+    width: 100%;
+    padding: 13px;
+    background: transparent;
+    border: 2px dashed #444;
+    border-radius: 10px;
+    color: #888;
+    font-size: 0.95rem;
+    cursor: pointer;
+    margin-top: 4px;
+    transition: all 0.2s;
+  }
+  .btn-añadir-acomp:hover { border-color: var(--amarillo); color: var(--amarillo); }
+  .acomp-selector {
+    background: #222;
+    border: 2px solid var(--amarillo);
+    border-radius: 10px;
+    padding: 12px 14px;
+    display: none;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 4px;
+  }
+  .acomp-selector.visible { display: flex; }
+  .acomp-selector .field-wrap input {
+    font-size: 1rem;
+    padding: 12px 40px 12px 12px;
+  }
+  .acomp-selector .acomp-horas-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .acomp-selector .acomp-horas-row label {
+    font-size: 0.85rem;
+    color: #aaa;
+    text-transform: none;
+    letter-spacing: 0;
+    margin: 0;
+    white-space: nowrap;
+  }
+  .acomp-selector .acomp-horas-row input {
+    width: 90px;
+    padding: 10px;
+    font-size: 1rem;
+    border: 1px solid #444;
+    border-radius: 8px;
+    background: #2A2A2A;
+    color: white;
+  }
+  .btn-confirmar-acomp {
+    padding: 10px;
+    background: var(--amarillo);
+    color: var(--negro);
+    border: none;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    font-weight: 700;
+    cursor: pointer;
+  }
+  .btn-cancelar-acomp {
+    padding: 10px;
+    background: transparent;
+    color: #888;
+    border: 1px solid #444;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    cursor: pointer;
+  }
+
   /* BUSCADOR NOMBRES */
   .buscador-wrap { position: relative; }
   .buscador-wrap input[type="text"] {
@@ -401,6 +527,7 @@
       <div class="field-wrap">
         <input type="text" id="obra" list="lista-obras" placeholder="Escribe o busca la obra..." autocomplete="off" oninput="syncClear('obra','btn-clear-obra')" style="padding-right:44px">
         <datalist id="lista-obras">
+          <option>AUSENCIA</option>
           <option>BECSA LOS NARANJOS</option>
           <option>BECSA MONTSERRAT</option>
           <option>BECSA TORRENTE</option>
@@ -409,7 +536,6 @@
           <option>BERTOLIN JYSK ALMENARA</option>
           <option>BLAUVERD ALZIRA</option>
           <option>BLAUVERD PATERNA</option>
-          <option>BLAUVERD PATERNA (LEGRAF)</option>
           <option>BLAUVERD PICASSENT</option>
           <option>BLAUVERD SAN ANTONIO BENAJEBER</option>
           <option>DOC EDIFICIO TURISMO</option>
@@ -418,12 +544,18 @@
           <option>FERROVIAL OROPESA</option>
           <option>OBRA MªDOLORES CAMPILLO DE DUEÑAS</option>
           <option>OBRA PUÇOL RUBÉN VAQUERO</option>
+          <option>PIRAVALLS FAURA</option>
           <option>PIRAVALLS MONCADA</option>
           <option>REVISAR</option>
           <option>URBIALBA AVDA PUERTO</option>
           <option>UTE FERROVIAL MONCOFAR</option>
+          <option>VACACIONES</option>
+          <option>VEOLIA ALAQUÁS</option>
+          <option>VEOLIA CABANYAL</option>
           <option>VEOLIA CARLET</option>
           <option>VEOLIA PATERNA</option>
+          <option>VEOLIA SAGUNTO</option>
+          <option>VEOLIA SENYERA</option>
         </datalist>
         <button class="btn-clear" id="btn-clear-obra" onclick="clearField('obra','btn-clear-obra')" style="display:none">✕</button>
       </div>
@@ -432,6 +564,29 @@
     <div class="campo">
       <label>Horas trabajadas</label>
       <input type="number" id="horas" min="0.5" max="24" step="0.5" placeholder="Ej: 8">
+    </div>
+
+    <!-- ACOMPAÑANTES -->
+    <div class="campo">
+      <label>Acompañantes <span style="font-weight:400;color:#888;text-transform:none">(opcional)</span></label>
+      <div id="acomp-lista" class="acomp-lista"></div>
+
+      <!-- Selector para añadir acompañante -->
+      <div class="acomp-selector" id="acomp-selector">
+        <div class="field-wrap">
+          <input type="text" id="acomp-nombre-input" list="lista-nombres-acomp" placeholder="Nombre del acompañante..." autocomplete="off" oninput="syncClear('acomp-nombre-input','btn-clear-acomp')" style="padding-right:44px">
+          <datalist id="lista-nombres-acomp"></datalist>
+          <button class="btn-clear" id="btn-clear-acomp" onclick="clearField('acomp-nombre-input','btn-clear-acomp')" style="display:none">✕</button>
+        </div>
+        <div class="acomp-horas-row">
+          <label>Horas:</label>
+          <input type="number" id="acomp-horas-input" min="0.5" max="24" step="0.5" placeholder="8">
+        </div>
+        <button class="btn-confirmar-acomp" onclick="confirmarAcomp()">+ Añadir</button>
+        <button class="btn-cancelar-acomp" onclick="cerrarSelectorAcomp()">Cancelar</button>
+      </div>
+
+      <button class="btn-añadir-acomp" id="btn-añadir-acomp" onclick="abrirSelectorAcomp()">+ Añadir acompañante</button>
     </div>
 
     <button class="btn-enviar" id="btn-enviar" onclick="enviarParte()">
@@ -476,6 +631,7 @@
       <div class="select-wrap" style="flex:1;min-width:140px">
         <select id="filtro-obra" onchange="renderTabla()">
           <option value="">Todas las obras</option>
+          <option>AUSENCIA</option>
           <option>BECSA LOS NARANJOS</option>
           <option>BECSA MONTSERRAT</option>
           <option>BECSA TORRENTE</option>
@@ -484,7 +640,6 @@
           <option>BERTOLIN JYSK ALMENARA</option>
           <option>BLAUVERD ALZIRA</option>
           <option>BLAUVERD PATERNA</option>
-          <option>BLAUVERD PATERNA (LEGRAF)</option>
           <option>BLAUVERD PICASSENT</option>
           <option>BLAUVERD SAN ANTONIO BENAJEBER</option>
           <option>DOC EDIFICIO TURISMO</option>
@@ -493,12 +648,18 @@
           <option>FERROVIAL OROPESA</option>
           <option>OBRA MªDOLORES CAMPILLO DE DUEÑAS</option>
           <option>OBRA PUÇOL RUBÉN VAQUERO</option>
+          <option>PIRAVALLS FAURA</option>
           <option>PIRAVALLS MONCADA</option>
           <option>REVISAR</option>
           <option>URBIALBA AVDA PUERTO</option>
           <option>UTE FERROVIAL MONCOFAR</option>
+          <option>VACACIONES</option>
+          <option>VEOLIA ALAQUÁS</option>
+          <option>VEOLIA CABANYAL</option>
           <option>VEOLIA CARLET</option>
           <option>VEOLIA PATERNA</option>
+          <option>VEOLIA SAGUNTO</option>
+          <option>VEOLIA SENYERA</option>
         </select>
       </div>
     </div>
@@ -642,11 +803,26 @@ window.onload = () => {
     dl.appendChild(opt);
   });
 
+  // Poblar datalist de acompañantes (misma lista)
+  const dl2 = document.getElementById('lista-nombres-acomp');
+  TRABAJADORES.forEach(t => {
+    const opt = document.createElement('option');
+    opt.value = t;
+    dl2.appendChild(opt);
+  });
+
   // Guardar último trabajador seleccionado
   const ultimo = localStorage.getItem('ultimo_trabajador');
   if (ultimo) {
     document.getElementById('nombre').value = ultimo;
     syncClear('nombre', 'btn-clear-nombre');
+  }
+
+  // Guardar última obra seleccionada
+  const ultimaObra = localStorage.getItem('ultima_obra');
+  if (ultimaObra) {
+    document.getElementById('obra').value = ultimaObra;
+    syncClear('obra', 'btn-clear-obra');
   }
 };
 
@@ -695,6 +871,58 @@ function seleccionarNombre(nombre) {
   document.getElementById('nombre-lista').classList.remove('visible');
 }
 
+// ─── ACOMPAÑANTES ───────────────────────────────
+let acompañantes = [];
+
+function abrirSelectorAcomp() {
+  document.getElementById('acomp-selector').classList.add('visible');
+  document.getElementById('btn-añadir-acomp').style.display = 'none';
+  document.getElementById('acomp-nombre-input').value = '';
+  document.getElementById('acomp-horas-input').value = '';
+  document.getElementById('btn-clear-acomp').style.display = 'none';
+  document.getElementById('acomp-nombre-input').focus();
+}
+
+function cerrarSelectorAcomp() {
+  document.getElementById('acomp-selector').classList.remove('visible');
+  document.getElementById('btn-añadir-acomp').style.display = 'block';
+}
+
+function confirmarAcomp() {
+  const nombre = document.getElementById('acomp-nombre-input').value.trim();
+  const horas = document.getElementById('acomp-horas-input').value;
+  if (!nombre || !horas) {
+    alert('Indica el nombre y las horas del acompañante');
+    return;
+  }
+  acompañantes.push({ nombre, horas: parseFloat(horas) });
+  renderAcompañantes();
+  cerrarSelectorAcomp();
+}
+
+function renderAcompañantes() {
+  const lista = document.getElementById('acomp-lista');
+  lista.innerHTML = '';
+  acompañantes.forEach((a, i) => {
+    const div = document.createElement('div');
+    div.className = 'acomp-item';
+    div.innerHTML = `
+      <div class="acomp-nombre">👷 ${a.nombre}</div>
+      <div class="acomp-horas-wrap">
+        <label>Horas:</label>
+        <input type="number" min="0.5" max="24" step="0.5" value="${a.horas}" onchange="acompañantes[${i}].horas=parseFloat(this.value)">
+      </div>
+      <button class="btn-quitar-acomp" onclick="quitarAcomp(${i})">✕</button>
+    `;
+    lista.appendChild(div);
+  });
+}
+
+function quitarAcomp(i) {
+  acompañantes.splice(i, 1);
+  renderAcompañantes();
+}
+
 // ─── CAMPO CON X ────────────────────────────────
 function syncClear(fieldId, btnId) {
   const val = document.getElementById(fieldId).value;
@@ -727,32 +955,31 @@ function enviarParte() {
   btn.textContent = 'Enviando...';
 
   localStorage.setItem('ultimo_trabajador', nombre);
+  localStorage.setItem('ultima_obra', obra);
   syncClear('nombre', 'btn-clear-nombre');
 
-  const datos = { nombre, fecha, obra, horas: parseFloat(horas) };
+  // Construir array de filas: trabajador principal + acompañantes
+  const filas = [{ nombre, fecha, obra, horas: parseFloat(horas) }];
+  acompañantes.forEach(a => filas.push({ nombre: a.nombre, fecha, obra, horas: a.horas }));
 
-  fetch(SHEET_URL, {
-    method: 'POST',
-    mode: 'no-cors',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(datos)
-  })
-  .then(() => {
-    document.getElementById('form-contenido').style.display = 'none';
-    const conf = document.getElementById('confirmacion');
-    conf.classList.add('visible');
-    const fechaLeg = new Date(fecha + 'T12:00:00').toLocaleDateString('es-ES', {day:'numeric', month:'long'});
-    document.getElementById('resumen-enviado').textContent =
-      `${nombre} · ${fechaLeg} · ${obra} · ${horas}h`;
-  })
-  .catch(() => {
-    // Con mode: no-cors siempre cae aquí aunque funcione; mostramos confirmación igualmente
+  const mostrarConfirmacion = () => {
     document.getElementById('form-contenido').style.display = 'none';
     document.getElementById('confirmacion').classList.add('visible');
     const fechaLeg = new Date(fecha + 'T12:00:00').toLocaleDateString('es-ES', {day:'numeric', month:'long'});
+    const total = filas.length;
     document.getElementById('resumen-enviado').textContent =
-      `${nombre} · ${fechaLeg} · ${obra} · ${horas}h`;
-  });
+      `${total} registro${total>1?'s':''} enviado${total>1?'s':''} · ${fechaLeg} · ${obra}`;
+  };
+
+  // Enviar todas las filas
+  Promise.allSettled(filas.map(datos =>
+    fetch(SHEET_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(datos)
+    })
+  )).then(mostrarConfirmacion).catch(mostrarConfirmacion);
 }
 
 function nuevoRegistro() {
@@ -762,6 +989,9 @@ function nuevoRegistro() {
   document.getElementById('horas').value = '';
   document.getElementById('btn-enviar').disabled = false;
   document.getElementById('btn-enviar').textContent = '✓ Enviar parte';
+  acompañantes = [];
+  renderAcompañantes();
+  cerrarSelectorAcomp();
 }
 
 // ─── PANEL ADMIN ────────────────────────────────
